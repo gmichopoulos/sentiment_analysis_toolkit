@@ -1,3 +1,6 @@
+# Data files
+data/*
+
 *.py[cod]
 
 # C extensions
