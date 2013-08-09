@@ -58,9 +58,6 @@ from pyroc import *
 
 ###### CONSTANTS #########
 
-POLARITY_DATA_DIR = 'ThankYouNoteData'
-POS_FILE = os.path.join(POLARITY_DATA_DIR, 'good_thankYouNotes.txt')
-NEG_FILE = os.path.join(POLARITY_DATA_DIR, 'bad_thankYouNotes_postFilters.txt')
 NUM_FEATURES_TO_TEST = [100, 1000, 10000, 100000]
 
 ###### MODULE FUNCTIONS ######

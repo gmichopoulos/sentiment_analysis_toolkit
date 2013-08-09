@@ -13,10 +13,6 @@
 #
 # written by George Michopoulos, 7/20/13 
 #
-##############################
-# TODO:
-##############################
-# Write script
 
 import re, math, random, collections, itertools, pickle, csv, os, sys, argparse
 import nltk, nltk.classify.util, nltk.metrics
@@ -27,8 +23,6 @@ from nltk.collocations import BigramCollocationFinder
 from nltk.metrics import BigramAssocMeasures
 from nbayes_sentiment import *
 
-
-###### MAIN ######
 
 def main(argv):
 
