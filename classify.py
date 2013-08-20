@@ -1,6 +1,6 @@
 # classify.py
 #
-# This program is designed to classify data using a Naive Bayes classifier. 
+# This script is designed to classify data using a Naive Bayes classifier. 
 # It must be passed in a file containing a trained nltk.NaiveBayesClassifier
 # (the output of train.py) and a file containing a list of newline separated
 # test input. It will output the list of positive and negative questions as a
@@ -46,7 +46,10 @@ def main(argv):
   parser.add_argument("-l", "--limit_features", type=int, help="number of best \
                       features to use", default="1000")
 
-  parser.add_argument("-b", "--bigram", help="classify using bigram features.",
+  parser.add_argument("-b", "--bigram", help="classify using bigram features",
+                      action="store_true")
+
+  parser.add_argument("-v", "--verbose", help="print status messages",
                       action="store_true")
 
   args = parser.parse_args()
@@ -55,7 +58,6 @@ def main(argv):
   # Validate and load classifier
   if args.classifier.split(".")[-1] != "pickle":
     sys.exit("classifier must be a .pickle file.")
-
   f = open(args.classifier)
   classifier = pickle.load(f)
   print "Classifier loaded.\n"
@@ -75,7 +77,7 @@ def main(argv):
         words = dict([(word, True) for word in words])
       test_features.append(words)
       original_sentences.append(s)
-  print "Features Loaded.\n"
+  if args.verbose print "Features Loaded.\n"
 
   # Puts original sentence into appropriate list based on classification
   for i, features in enumerate(test_features):
@@ -85,7 +87,7 @@ def main(argv):
     else:
       predicted_negatives.append(original_sentences[i])
 
-  print "Classification Complete.\n"
+  if args.verbose print "Classification Complete.\n"
 
   if args.output == "STDOUT":
     for pos, neg in itertools.izip_longest(predicted_positives,predicted_negatives,fillvalue=''):
@@ -96,7 +98,7 @@ def main(argv):
       result_writer = csv.writer(f, delimiter=args.delimiter, quotechar='"',
                                  quoting=csv.QUOTE_MINIMAL)
       result_writer.writerows(itertools.izip_longest(predicted_positives,predicted_negatives,fillvalue=''))
-      print "Results Successfully Written to " + args.output + "!\n"
+      if args.verbose print "Results Successfully Written to " + args.output + "!\n"
 
 
 
