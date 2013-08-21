@@ -52,9 +52,6 @@ from nltk.metrics import BigramAssocMeasures
 from nltk.probability import FreqDist, ConditionalFreqDist
 from nltk.collocations import BigramCollocationFinder
 from nltk.metrics import BigramAssocMeasures
-from nltk.corpus import stopwords
-from pyroc import *
-
 
 ###### CONSTANTS #########
 
@@ -144,7 +141,7 @@ def create_word_scores(pos, neg):
   return word_scores
 
 def evaluate_features(feature_select, pos, neg, num_training_sets, avg, limit, \
-                                    rand, stop, stopset, word_scores, ROC_data):
+                                    rand, stop, stopset, word_scores, ROC_data=None):
   pos_features = []
   neg_features = []
 
@@ -185,7 +182,7 @@ def evaluate_features(feature_select, pos, neg, num_training_sets, avg, limit, \
     print 'average pos recall:', avg_stats[2]
     print 'average neg precision:', avg_stats[3]
     print 'average neg recall:', avg_stats[4]
-    print 'average AUC:', avg_stats[5] 
+    if ROC_data: print 'average AUC:', avg_stats[5] 
     print '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
   
   else:
@@ -193,7 +190,7 @@ def evaluate_features(feature_select, pos, neg, num_training_sets, avg, limit, \
                                                 limit, ROC_data)
 
 
-def divide_and_test(pos_features, neg_features, t, num_training_sets, num_features, ROC_data):
+def divide_and_test(pos_features, neg_features, t, num_training_sets, num_features, ROC_data=None):
 
   # Selects features to be used for training and testing
   pos_start = int(math.floor(len(pos_features) * t/num_training_sets))
@@ -227,12 +224,14 @@ def divide_and_test(pos_features, neg_features, t, num_training_sets, num_featur
   curr_neg_recall = nltk.metrics.recall(reference_sets[0], test_sets[0])
 
   # Print ROC curve and AUC
-  roc_data = ROCData((label, classifier.prob_classify(feature_set).prob(1)) \
-                                  for feature_set, label in test_features)
-  auc = roc_data.auc()
-  ROC_data[0].append(roc_data)
-  ROC_data[1].append(str(num_features) + " Features: set " + str(t + 1) + \
-                    " of " + str(num_training_sets) + ", AUC = " + str(auc))
+  auc = 0
+  if ROC_data:
+    roc_data = ROCData((label, classifier.prob_classify(feature_set).prob(1)) \
+                                    for feature_set, label in test_features)
+    auc = roc_data.auc()
+    ROC_data[0].append(roc_data)
+    ROC_data[1].append(str(num_features) + " Features: set " + str(t + 1) + \
+                      " of " + str(num_training_sets) + ", AUC = " + str(auc))
 
   #prints metrics to show how well the feature selection did
   print 'testing on %d of %d sets, from [positive] index %d to index %d:' \
@@ -244,7 +243,7 @@ def divide_and_test(pos_features, neg_features, t, num_training_sets, num_featur
   print 'pos recall:', curr_pos_recall
   print 'neg precision:', curr_neg_precision
   print 'neg recall:', curr_neg_recall
-  print 'AUC:', auc
+  if ROC_data: print 'AUC:', auc
   classifier.show_most_informative_features(10)
 
   return [curr_accuracy, curr_pos_precision, curr_pos_recall, 
@@ -293,12 +292,15 @@ def main(argv):
 
   args = parser.parse_args()
 
-  # Set up data for evaluate function
-  ROC_data = [[],[]]
+  # Set up ROC graphing data and import pyroc as needed
+  if args.graph:
+    from pyroc import *
+    ROC_data = [[],[]]
 
   # Set up stopword set
   stopset = []
   if args.stopwords:
+    from nltk.corpus import stopwords
     print "Stop words are being filtered out."
     stopset = set(stopwords.words('english'))
 
