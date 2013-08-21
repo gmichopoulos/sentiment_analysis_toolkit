@@ -1,6 +1,7 @@
 # Data files
 data/*
 *.pickle
+*.csv
 
 *.py[cod]
 
