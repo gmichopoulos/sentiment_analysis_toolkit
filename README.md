@@ -47,9 +47,9 @@ Usage
    python train.py -p [positive_file_name] -n [negative_file_name] -o [classifier_file_name]
    
    Optional options:
-   - -l [number_of_best_features_to_limit] sets a specific limit to the number of best features uesed for training (default is 1000)
+   - -l [number_of_best_features_to_limit] sets a specific limit to the number of best features used for training (default is 1000)
    - -b uses bigrams as features
-   - -s removes stop words before processing
+   - -s removes stopwords before processing
    - -t tags negated words
    - -v prints status messages
    
@@ -70,11 +70,11 @@ Usage
    Optional options:
    - -l [number_of_features] sets the number of best features to use (default is 1000)
    - -d [number_of_divisions] selects the number of divisions created in input data: 1 out of d will be used for testing.)
-   - -a trains and tests over each possible set of divisions of data and average the results for more smoothing
+   - -a trains and tests over each possible set of divisions of data and averages the results for more smoothing
    - -b uses bigrams as features
    - -s filters out stopwords from features
    - -r randomizes training data to reduce clumping
-   - -g graphs the resulting ROC curves of each round of testing that occurs
+   - -g graphs the resulting ROC curves for each round of testing
    - -t tags negated words with word_not
 
 
