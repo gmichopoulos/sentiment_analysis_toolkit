@@ -2,14 +2,17 @@
 #
 # This script is designed to classify data using a Naive Bayes classifier. 
 # It must be passed in a file containing a trained nltk.NaiveBayesClassifier
-# (the output of train.py) and a file containing a list of newline separated
+# (the output of train.py) and a file containing a list of newline (\r) separated
 # test input. It will output the list of positive and negative questions as a
 # two column, tab-separated list. (positive \t negative)
 # 
 # Options:
 # ------------------------
 # -c [classifier_file_name]
+# -t [test_data_file_name] (required; input data must be newline separated)
 # -o [output_file_name]  (use to output to file instead of STDOUT)
+# -d [delimiter] (choose column delimiter for files)
+# -v (print status messages)
 #
 # written by George Michopoulos, 7/20/13 
 #
@@ -60,7 +63,7 @@ def main(argv):
     sys.exit("classifier must be a .pickle file.")
   f = open(args.classifier)
   classifier = pickle.load(f)
-  print "Classifier loaded.\n"
+  if args.verbose: print "Classifier loaded.\n"
   f.close()
 
   test_features = []
@@ -68,16 +71,16 @@ def main(argv):
   predicted_positives = []
   predicted_negatives = []
 
-  with open(args.test_data, 'r') as sentences:
-    for s in sentences:
+  with open(args.test_data, 'r') as f:
+    for s in f:
       words = re.findall(r"[\w']+|[.,!?;]", s.rstrip())
       if args.bigram:
         words = bigram_word_features(words, args.limit_features, 0, 0, 0)
       else:
         words = dict([(word, True) for word in words])
       test_features.append(words)
-      original_sentences.append(s)
-  if args.verbose print "Features Loaded.\n"
+      original_sentences.append(s.rstrip())
+  if args.verbose: print "Features Loaded.\n"
 
   # Puts original sentence into appropriate list based on classification
   for i, features in enumerate(test_features):
@@ -87,7 +90,10 @@ def main(argv):
     else:
       predicted_negatives.append(original_sentences[i])
 
-  if args.verbose print "Classification Complete.\n"
+  if args.verbose: 
+    print "Classification Complete.\n " + str(len(predicted_positives)) + \
+          " sentences classified as positive,\n " + str(len(predicted_negatives)) + \
+          " sentences classified as negative.\n "
 
   if args.output == "STDOUT":
     for pos, neg in itertools.izip_longest(predicted_positives,predicted_negatives,fillvalue=''):
@@ -95,10 +101,10 @@ def main(argv):
 
   else:
      with open(args.output, 'wb') as f:
-      result_writer = csv.writer(f, delimiter=args.delimiter, quotechar='"',
-                                 quoting=csv.QUOTE_MINIMAL)
+      result_writer = csv.writer(f, dialect='excel', delimiter=args.delimiter)
       result_writer.writerows(itertools.izip_longest(predicted_positives,predicted_negatives,fillvalue=''))
-      if args.verbose print "Results Successfully Written to " + args.output + "!\n"
+      if args.verbose: print "Results Successfully Written to " + args.output + "!\n"
+
 
 
 

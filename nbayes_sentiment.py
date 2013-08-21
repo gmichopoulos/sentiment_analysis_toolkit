@@ -84,16 +84,18 @@ def bigram_word_features(words, limit, stop, stopset, word_score_placeholder, \
   return dict([(ngram, True) for ngram in itertools.chain(words, bigrams)])
 
 
-# def tag_negated_words(sentence):
+# Didn't seem to accomplish anything with my test data; let me know if it increases
+# the accuracy of your classifiers, or if you make any changes that make it do so
+def tag_negated_words(sentence):
 
-#   neglist = ['not', 'didn\'t', 'didnt', 'cant', 'can\'t', 'don\'t', 'dont', \
-#               'wouldn\'t', 'wouldnt', 'shouldn\'t', 'shouldnt', 'isn\'t', 'isnt']
-#   for i, word in enumerate(sentence):
-#     if word.lower() in neglist and i < len(sentence) - 1:
-#       sentence[i+1] = sentence[i+1] + "_not"
-#       del sentence[i]
+  neglist = ['not', 'didn\'t', 'didnt', 'cant', 'can\'t', 'don\'t', 'dont', \
+              'wouldn\'t', 'wouldnt', 'shouldn\'t', 'shouldnt', 'isn\'t', 'isnt']
+  for i, word in enumerate(sentence):
+    if word.lower() in neglist and i < len(sentence) - 1:
+      sentence[i+1] = sentence[i+1] + "_not"
+      del sentence[i]
 
-#   return sentence
+  return sentence
 
 
 def create_word_scores(pos, neg):
@@ -103,14 +105,14 @@ def create_word_scores(pos, neg):
   with open(pos, 'r') as pos_sentences:
     for i in pos_sentences:
       pos_word = re.findall(r"[\w']+|[.,!?;]", i.rstrip())
-      #if args.tag_negative_words:
-      #  pos_word = tag_negated_words(pos_word)
+      if args.tag_negative_words:
+       pos_word = tag_negated_words(pos_word)
       pos_words.append(pos_word)
   with open(neg, 'r') as neg_sentences:
     for i in neg_sentences:
       neg_word = re.findall(r"[\w']+|[.,!?;]", i.rstrip())
-      #if args.tag_negative_words:
-      #  neg_word = tag_negated_words(neg_word)
+      if args.tag_negative_words:
+       neg_word = tag_negated_words(neg_word)
       neg_words.append(neg_word)
   pos_words = list(itertools.chain(*pos_words))
   neg_words = list(itertools.chain(*neg_words))
