@@ -15,7 +15,7 @@ Composed of three scripts:
 
 - nbayes_sentiment.py
 
-   Contains feature extraction methods used by train.py and also serves a testing demo to evaulate accuracy of classifiers with different options.
+   Contains feature extraction methods used by train.py and also serves as a testing demo to evaulate accuracy of classifiers with different options.
 
 
 Installing Dependencies
