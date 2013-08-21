@@ -8,11 +8,12 @@
 # 
 # Options:
 # ------------------------
-# -c [classifier_file_name]
+# -c [classifier_file_name] (required classifier from train.py)
 # -t [test_data_file_name] (required; input data must be newline separated)
 # -o [output_file_name]  (use to output to file instead of STDOUT)
 # -d [delimiter] (choose column delimiter for files)
 # -v (print status messages)
+# -t (tag negated words) 
 #
 # written by George Michopoulos, 7/20/13 
 #

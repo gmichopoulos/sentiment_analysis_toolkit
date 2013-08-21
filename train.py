@@ -10,6 +10,7 @@
 # -p [positive_file_name] 
 # -n [negative_file_name]
 # -o [output_file_name]
+# -l [number_of_best_features_to_train_on]
 # -b (use bigrams as features)
 # -s (remove stop words before processing)
 # -t (tag negated words) 
@@ -63,10 +64,10 @@ def main(argv):
                                    a positive and a negative input file")
 
   parser.add_argument("-p", "--positive", help="input relative path of a \
-                      positive data file")
+                      positive data file", required=True)
 
   parser.add_argument("-n", "--negative", help="input relative path of a \
-                      negative data file")
+                      negative data file", required=True)
 
   parser.add_argument("-o", "--output", help="file name for output classifier, \
                       not including .pickle file ending", default="nBayesClassifier")

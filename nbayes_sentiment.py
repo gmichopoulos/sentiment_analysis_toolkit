@@ -259,10 +259,10 @@ def main(argv):
                                       a positive and a negative input file")
 
   parser.add_argument("-p", "--positive", help="input relative path of a \
-                      positive data file", default=POS_FILE)
+                      positive data file", required=True)
 
   parser.add_argument("-n", "--negative", help="input relative path of a \
-                      negative data file", default=NEG_FILE)
+                      negative data file", required=True)
 
   parser.add_argument("-d", "--divisions", type=int, help="select the number \
                       of divisions created in input data: 1 out of d will \
