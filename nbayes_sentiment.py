@@ -40,7 +40,6 @@
 #
 # -g (graph the resulting ROC curves of each round of testing that occurs)
 #
-# -t (tag negated words with word_not)
 #
 # written by George Michopoulos, 7/19/13 
 #
@@ -83,36 +82,33 @@ def bigram_word_features(words, limit, stop, stopset, word_score_placeholder, \
 
 # Didn't seem to accomplish anything with my test data; let me know if it increases
 # the accuracy of your classifiers, or if you make any changes that make it do so
-def tag_negated_words(sentence):
+#
+# def tag_negated_words(sentence):
 
-  neglist = ['not', 'didn\'t', 'didnt', 'cant', 'can\'t', 'don\'t', 'dont', \
-              'wouldn\'t', 'wouldnt', 'shouldn\'t', 'shouldnt', 'isn\'t', 'isnt']
-  for i, word in enumerate(sentence):
-    if word.lower() in neglist and i < len(sentence) - 1:
-      sentence[i+1] = sentence[i+1] + "_not"
-      del sentence[i]
+#   neglist = ['not', 'didn\'t', 'didnt', 'cant', 'can\'t', 'don\'t', 'dont', \
+#               'wouldn\'t', 'wouldnt', 'shouldn\'t', 'shouldnt', 'isn\'t', 'isnt']
+#   for i, word in enumerate(sentence):
+#     if word.lower() in neglist and i < len(sentence) - 1:
+#       sentence[i+1] = sentence[i+1] + "_not"
+#       del sentence[i]
 
-  return sentence
+#   return sentence
 
 
 def create_word_scores(pos, neg):
   # Create lists of all positive and negative words
-  pos_words = []
-  neg_words = []
+  pos_words_list = []
+  neg_words_list = []
   with open(pos, 'r') as pos_sentences:
     for i in pos_sentences:
-      pos_word = re.findall(r"[\w']+|[.,!?;]", i.rstrip())
-      if args.tag_negative_words:
-       pos_word = tag_negated_words(pos_word)
-      pos_words.append(pos_word)
+      pos_words = re.findall(r"[\w']+|[.,!?;]", i.rstrip())
+      pos_words_list.append(pos_words)
   with open(neg, 'r') as neg_sentences:
     for i in neg_sentences:
-      neg_word = re.findall(r"[\w']+|[.,!?;]", i.rstrip())
-      if args.tag_negative_words:
-       neg_word = tag_negated_words(neg_word)
-      neg_words.append(neg_word)
-  pos_words = list(itertools.chain(*pos_words))
-  neg_words = list(itertools.chain(*neg_words))
+      neg_words = re.findall(r"[\w']+|[.,!?;]", i.rstrip())
+      neg_words_list.append(neg_words)
+  pos_words_list = list(itertools.chain(*pos_words_list))
+  neg_words_list = list(itertools.chain(*neg_words_list))
 
   # Build frequency distibution of all words, positive, and negative labels
   word_fd = FreqDist()
@@ -120,7 +116,7 @@ def create_word_scores(pos, neg):
   for word in pos_words:
     word_fd.inc(word.lower())
     cond_word_fd[1].inc(word.lower())
-  for word in neg_words:
+  for word in neg_words_list:
     word_fd.inc(word.lower())
     cond_word_fd[0].inc(word.lower())
 
@@ -141,7 +137,7 @@ def create_word_scores(pos, neg):
   return word_scores
 
 def evaluate_features(feature_select, pos, neg, num_training_sets, avg, limit, \
-                                    rand, stop, stopset, word_scores, ROC_data=None):
+                                    rand, stop, stopset, word_scores, ROC_data):
   pos_features = []
   neg_features = []
 
@@ -160,6 +156,8 @@ def evaluate_features(feature_select, pos, neg, num_training_sets, avg, limit, \
   if rand:
     random.shuffle(pos_features)
     random.shuffle(neg_features)
+
+  print 'Read in %d positive features and %d negative features\n' % (len(pos_features), len(neg_features))
 
   # Call divide_and_test for each possible combo and average results
   if avg:
@@ -190,7 +188,7 @@ def evaluate_features(feature_select, pos, neg, num_training_sets, avg, limit, \
                                                 limit, ROC_data)
 
 
-def divide_and_test(pos_features, neg_features, t, num_training_sets, num_features, ROC_data=None):
+def divide_and_test(pos_features, neg_features, t, num_training_sets, num_features, ROC_data):
 
   # Selects features to be used for training and testing
   pos_start = int(math.floor(len(pos_features) * t/num_training_sets))
@@ -226,16 +224,18 @@ def divide_and_test(pos_features, neg_features, t, num_training_sets, num_featur
   # Print ROC curve and AUC
   auc = 0
   if ROC_data:
+    from pyroc import ROCData
     roc_data = ROCData((label, classifier.prob_classify(feature_set).prob(1)) \
                                     for feature_set, label in test_features)
-    auc = roc_data.auc()
+    auc = roc_data.auc() 
     ROC_data[0].append(roc_data)
     ROC_data[1].append(str(num_features) + " Features: set " + str(t + 1) + \
                       " of " + str(num_training_sets) + ", AUC = " + str(auc))
 
-  #prints metrics to show how well the feature selection did
-  print 'testing on %d of %d sets, from [positive] index %d to index %d:' \
-                      % ((t + 1), num_training_sets, pos_start, pos_cutoff)
+  # Prints metrics to show how well the feature selection did
+  print 'testing on %d of %d sets, from positive index %d to index %d and from negative index %d to index %d:' \
+                      % ((t + 1), num_training_sets, pos_start, pos_cutoff, neg_start, neg_cutoff)
+
   print 'train on %d instances, test on %d instances' \
                                % (len(train_features), len(test_features))
   print 'accuracy:', curr_accuracy
@@ -245,7 +245,6 @@ def divide_and_test(pos_features, neg_features, t, num_training_sets, num_featur
   print 'neg recall:', curr_neg_recall
   if ROC_data: print 'AUC:', auc
   classifier.show_most_informative_features(10)
-
   return [curr_accuracy, curr_pos_precision, curr_pos_recall, 
           curr_neg_precision, curr_neg_recall, auc]
 
@@ -277,8 +276,8 @@ def main(argv):
   parser.add_argument("-s", "--stopwords", help="filter out stop words before \
                       training.", action="store_true")
 
-  parser.add_argument("-t", "--tag_negative_words", help="tag negated words with \
-                      word_not to capture more meaning.", action="store_true")
+  # parser.add_argument("-t", "--tag_negated_words", help="tag negated words with \
+  #                     word_not to capture more meaning.", action="store_true")
 
   parser.add_argument("-r", "--randomize", help="randomize training data to \
                       reduce clumping while training.", action="store_true")
@@ -293,8 +292,9 @@ def main(argv):
   args = parser.parse_args()
 
   # Set up ROC graphing data and import pyroc as needed
+  ROC_data = 0
   if args.graph:
-    from pyroc import *
+    from pyroc import plot_multiple_roc
     ROC_data = [[],[]]
 
   # Set up stopword set
