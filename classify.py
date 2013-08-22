@@ -13,7 +13,6 @@
 # -o [output_file_name]  (use to output to file instead of STDOUT)
 # -d [delimiter] (choose column delimiter for files)
 # -v (print status messages)
-# -t (tag negated words) 
 #
 # written by George Michopoulos, 7/20/13 
 #
@@ -105,7 +104,6 @@ def main(argv):
       result_writer = csv.writer(f, dialect='excel', delimiter=args.delimiter)
       result_writer.writerows(itertools.izip_longest(predicted_positives,predicted_negatives,fillvalue=''))
       if args.verbose: print "Results Successfully Written to " + args.output + "!\n"
-
 
 
 

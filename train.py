@@ -13,7 +13,6 @@
 # -l [number_of_best_features_to_train_on]
 # -b (use bigrams as features)
 # -s (remove stop words before processing)
-# -t (tag negated words) 
 # -v (print status messages)
 #
 # written by George Michopoulos, 7/20/13 
@@ -21,7 +20,7 @@
 # TODO:
 # ------------------------
 # -c [csv_file_name] (use two column csv as input instead)
-# -d [delimiter] (use to specify non-comma delimiter for input file)
+# -d [delimiter] (use to specify non-comma delimiter for input csv file)
 #
 
 import re, math, random, collections, itertools, pickle, os, sys, argparse
