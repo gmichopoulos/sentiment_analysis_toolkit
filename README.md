@@ -83,26 +83,26 @@ Consider that we have a set of positive and negative movie reviews in data/pos.t
 
 1. First, we would try different classifier evaluation methods to find the options whose resulting classifier has the sensitivity and specificity closest to the values we want:
    1. Try using different numbers of the best single-word features:
-      python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 100
-      python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000
-      python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 10000
+      - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 100
+      - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000
+      - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 10000
 
    2. Try using bigrams as features:
-      python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -b
+      - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -b
 
    3. Try removing stop words from whichever of the previous methods worked best
-      python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -s
+      - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -s
 
    4. If our dataset is small, try using the averaging option for smoother results, as well setting a the d option to something greater than 4:
-      python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -s -a -d 5
+      - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -s -a -d 5
 
 2. At this point we would know which options work best for our data. So the next step is to use train.py to train a classifier on all of our data with those options.
-   python train.py -p data/pos.txt -n data/neg.txt -o movieNBClassifierNoStop -l 1000 -s
+   - python train.py -p data/pos.txt -n data/neg.txt -o movieNBClassifierNoStop -l 1000 -s
 
 3. Now we can use "movieNBClassifierNoStop.pickle" to classify any new sets of movie review data, in this case reviews.txt. Use the -o and -d options to specify a two-column output file for the results:
-   python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt
-   python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt -o classified_reviews.txt -d | 
-      *I recommend using ` or | as your delimiter to avoid quotation and comma issues during post-processing and importing into Excel
+   - python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt
+   - python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt -o classified_reviews.txt -d | 
+      - *I recommend using ` or | as your delimiter to avoid quotation and comma issues during post-processing and importing into Excel
    
 
 
