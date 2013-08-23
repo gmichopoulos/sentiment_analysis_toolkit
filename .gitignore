@@ -9,6 +9,7 @@ data/*
 *.so
 
 # Packages
+pyroc.py
 *.egg
 *.egg-info
 dist
