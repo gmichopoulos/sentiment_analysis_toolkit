@@ -36,7 +36,7 @@
 #
 # -s (filter out stopwords from features)
 #
-# -r (randomize training data to reduce clumping )
+# -r (randomize training data to reduce clumping)
 #
 # -g (graph the resulting ROC curves of each round of testing that occurs)
 #
