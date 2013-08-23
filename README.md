@@ -36,7 +36,7 @@ Needed for nbayes_sentiment.py ROC graphing:
    - [matplotlib](http://matplotlib.sourceforge.net/users/installing.html)
       - Install dmg from site
    - [pyroc](https://github.com/marcelcaraciolo/PyROC) 
-      - Already bundled with toolkit
+      - Clone file and include in folder
 
 
 Usage
