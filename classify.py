@@ -80,7 +80,7 @@ def main(argv):
         words = dict([(word, True) for word in words])
       test_features.append(words)
       original_sentences.append(s.rstrip())
-  if args.verbose: print "Features Loaded.\n"
+  if args.verbose: print "Features loaded for " + str(len(test_features)) + " sentences.\n"
 
   # Puts original sentence into appropriate list based on classification
   for i, features in enumerate(test_features):
