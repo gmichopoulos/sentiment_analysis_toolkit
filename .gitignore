@@ -4,6 +4,8 @@ data/*
 *.csv
 *.txt
 
+HT_classify.py
+
 *.py[cod]
 
 # C extensions
