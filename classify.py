@@ -11,7 +11,9 @@
 # -c [classifier_file_name] (required classifier from train.py)
 # -t [test_data_file_name] (required; input data must be newline separated)
 # -o [output_file_name]  (use to output to file instead of STDOUT)
-# -d [delimiter] (choose column delimiter for files)
+# -d [delimiter] (chooses column delimiter for files)
+# -b (specifies that input classifier using bigram features)
+# -l [number_of_features] (specifies the number of best features used when training bigram classifier)
 # -v (print status messages)
 #
 # written by George Michopoulos, 7/20/13 
@@ -71,6 +73,7 @@ def main(argv):
   predicted_positives = []
   predicted_negatives = []
 
+  # Extract features from test data
   with open(args.test_data, 'r') as f:
     for s in f:
       words = re.findall(r"[\w']+|[.,!?;]", s.rstrip())
@@ -80,9 +83,11 @@ def main(argv):
         words = dict([(word, True) for word in words])
       test_features.append(words)
       original_sentences.append(s.rstrip())
+
   if args.verbose: print "Features loaded for " + str(len(test_features)) + " sentences.\n"
 
-  # Puts original sentence into appropriate list based on classification
+
+  # Put original sentence into appropriate list based on classification
   for i, features in enumerate(test_features):
     predicted = classifier.classify(features)
     if predicted:
@@ -95,8 +100,9 @@ def main(argv):
           " sentences classified as positive,\n " + str(len(predicted_negatives)) + \
           " sentences classified as negative.\n "
 
+  # Write output
   if args.output == "STDOUT":
-    for pos, neg in itertools.izip_longest(predicted_positives,predicted_negatives,fillvalue=''):
+    for pos, neg in itertools.izip_longest(predicted_positives, predicted_negatives, fillvalue=''):
       print pos + args.delimiter + neg + "\n"
 
   else:

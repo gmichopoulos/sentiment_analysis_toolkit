@@ -50,7 +50,6 @@ Usage
    - -l [number_of_best_features_to_limit] sets a specific limit to the number of best features used for training (default is 1000)
    - -b uses bigrams as features
    - -s removes stopwords before processing
-   - -t tags negated words
    - -v prints status messages
    
 - classify.py
@@ -60,7 +59,8 @@ Usage
    Optional options:
    - -o [output_file_name] outputs results to this file instead of STDOUT
    - -d [delimiter] sets column delimiter for files (default is "\t")
-   - -t tags negated words
+   - -b denotes that input classifier using bigram features
+      - -l [number_of_features] specifies the number of best features used when training bigram classifier
    - -v prints status messages
    
 - nbayes_sentiment.py
@@ -75,7 +75,6 @@ Usage
    - -s filters out stopwords from features
    - -r randomizes training data to reduce clumping
    - -g graphs the resulting ROC curves for each round of testing
-   - -t tags negated words with word_not
 
 Example
 --------------------------

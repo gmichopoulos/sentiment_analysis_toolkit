@@ -80,9 +80,6 @@ def main(argv):
   parser.add_argument("-s", "--stopwords", help="filter out stop words before \
                       training.", action="store_true")
 
-  parser.add_argument("-t", "--tag_negative_words", help="tag negated words with \
-                      word_not to capture more meaning.", action="store_true")
-
   parser.add_argument("-v", "--verbose", help="print status messages",
                       action="store_true")
 
@@ -98,16 +95,16 @@ def main(argv):
     if args.verbose: print "Stop words are being filtered out."
     stopset = set(stopwords.words('english'))
 
+  # Train classifier on specified features
   if args.bigram:
     if args.verbose: print '\nEvaluating the best %d bigram word features\n' % (args.limit_features)
     classifier = train(bigram_word_features, args.positive, args.negative, args.limit_features, 0, args.stopwords, stopset, 0)
-
   else:
-    # Finds word scores
     if args.verbose: print '\nEvaluating the best %d word features\n' % (args.limit_features)
     word_scores = create_word_scores(args.positive, args.negative)
     classifier = train(best_word_features, args.positive, args.negative, args.limit_features, 0, args.stopwords, stopset, word_scores)
 
+  # Write classifier to output file
   pickle.dump(classifier, f)
   f.close()
   if args.verbose: print 'Successfully wrote classifier to file ' + args.output + ".pickle!"

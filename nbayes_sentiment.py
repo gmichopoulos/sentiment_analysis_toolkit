@@ -10,7 +10,7 @@
 # Dependencies:
 # ----------------------------
 # nltk (sudo easy_install pip)
-# nltk corpus (sudo python -m nltk.downloader -d /usr/share/nltk_data all) (needed for stop words)
+# nltk corpus (sudo python -m nltk.downloader -d /usr/share/nltk_data stopwords) (needed for -s)
 # matplotlib (http://matplotlib.sourceforge.net/users/installing.html)
 # pyroc (https://github.com/marcelcaraciolo/PyROC)
 #
@@ -81,7 +81,7 @@ def bigram_word_features(words, limit, stop, stopset, word_score_placeholder, \
 
 
 # Didn't seem to accomplish anything with my test data; let me know if it increases
-# the accuracy of your classifiers, or if you make any changes that make it do so
+# the accuracy of your classifiers, or if you make any changes that make it do so! :)
 #
 # def tag_negated_words(sentence):
 
@@ -250,7 +250,7 @@ def divide_and_test(pos_features, neg_features, t, num_training_sets, num_featur
 
 
 
-###### MAIN ######
+###### MAIN SCRIPT ######
 
 def main(argv):
 
