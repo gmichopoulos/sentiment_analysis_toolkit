@@ -100,7 +100,7 @@ Suppose that we have sets of positive and negative movie reviews, in data/pos.tx
 
 3. Now we can use "movieNBClassifierNoStop.pickle" to classify any new sets of movie review data, in this case reviews.txt. We can use the -o and -d options to specify the name of a two-column output file that uses a specific delimiter:
    - python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt
-   - python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt -o classified_reviews.txt -d \| 
+   - python classify.py -c movieNBClassifierNoStop.pickle -t reviews.txt -o classified_reviews.txt -d \\| 
       - *I recommend using ` or | as your delimiter to avoid quotation and comma issues during post-processing and importing into Excel
 
 
