@@ -92,7 +92,7 @@ Suppose that we have sets of positive and negative movie reviews, in data/pos.tx
    3. Try removing stop words from whichever of the previous methods worked best
       - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -s
 
-   4. If our dataset is small, try using the averaging option for smoother results, as well setting a the d option to something greater than 4:
+   4. If our dataset is small, try using the averaging option for smoother results, as well setting the d option to something greater than 4:
       - python nbayes_sentiment.py -p data/pos.txt -n data/neg.txt -r -l 1000 -s -a -d 5
 
 2. At this point we know which options work best for our data, so the next step is to use train.py to train a classifier on all of our data with those options.
